@@ -25,7 +25,8 @@ class TrackingBottomSheet(private val controller: MangaDetailsController) : Bott
     SetTrackStatusDialog.Listener,
     SetTrackChaptersDialog.Listener,
     SetTrackScoreDialog.Listener,
-    TrackRemoveDialog.Listener {
+    TrackRemoveDialog.Listener,
+    SetTrackReadingDatesDialog.Listener {
 
     val activity = controller.activity!!
 
@@ -179,6 +180,28 @@ class TrackingBottomSheet(private val controller: MangaDetailsController) : Bott
         SetTrackScoreDialog(this, item).showDialog(controller.router)
     }
 
+    override fun onStartDateClick(position: Int) {
+        val item = adapter?.getItem(position) ?: return
+        if (item.track == null) return
+        if (controller.isNotOnline()) {
+            dismiss()
+            return
+        }
+
+        SetTrackReadingDatesDialog(this, SetTrackReadingDatesDialog.ReadingDate.Start, item).showDialog(controller.router)
+    }
+
+    override fun onFinishDateClick(position: Int) {
+        val item = adapter?.getItem(position) ?: return
+        if (item.track == null) return
+        if (controller.isNotOnline()) {
+            dismiss()
+            return
+        }
+
+        SetTrackReadingDatesDialog(this, SetTrackReadingDatesDialog.ReadingDate.Finish, item).showDialog(controller.router)
+    }
+
     override fun setStatus(item: TrackItem, selection: Int) {
         presenter.setStatus(item, selection)
         refreshItem(item)
@@ -207,6 +230,14 @@ class TrackingBottomSheet(private val controller: MangaDetailsController) : Bott
 
     override fun setChaptersRead(item: TrackItem, chaptersRead: Int) {
         presenter.setLastChapterRead(item, chaptersRead)
+        refreshItem(item)
+    }
+
+    override fun setReadingDate(item: TrackItem, type: SetTrackReadingDatesDialog.ReadingDate, date: Long) {
+        when (type) {
+            SetTrackReadingDatesDialog.ReadingDate.Start -> presenter.setStartDate(item, date)
+            SetTrackReadingDatesDialog.ReadingDate.Finish -> presenter.setFinishDate(item, date)
+        }
         refreshItem(item)
     }
 

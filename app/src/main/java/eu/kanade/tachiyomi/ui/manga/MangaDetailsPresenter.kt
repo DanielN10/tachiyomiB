@@ -915,6 +915,18 @@ class MangaDetailsPresenter(
         updateRemote(track, item.service)
     }
 
+    fun setStartDate(item: TrackItem, date: Long) {
+        val track = item.track!!
+        track.started_reading_date = date
+        updateRemote(track, item.service)
+    }
+
+    fun setFinishDate(item: TrackItem, date: Long) {
+        val track = item.track!!
+        track.finished_reading_date = date
+        updateRemote(track, item.service)
+    }
+
     companion object {
         const val MULTIPLE_VOLUMES = 1
         const val TENS_OF_CHAPTERS = 2

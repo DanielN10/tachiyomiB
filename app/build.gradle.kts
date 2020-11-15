@@ -27,6 +27,14 @@ fun runCommand(command: String): String {
 }
 
 android {
+    signingConfigs {
+        create("getBoolean") {
+            storeFile = file("B:\\Documents\\GitHub\\getBoolean\\ASKey.jks")
+            storePassword = "1Plus2=Three"
+            keyAlias = "key0"
+            keyPassword = "1Plus2=Three"
+        }
+    }
     compileSdkVersion(AndroidVersions.COMPILE_SDK)
     buildToolsVersion(AndroidVersions.BUILD_TOOL)
 
@@ -47,6 +55,7 @@ android {
         ndk {
             abiFilters("armeabi-v7a", "arm64-v8a", "x86")
         }
+        signingConfig = signingConfigs.getByName("getBoolean")
     }
     buildTypes {
         getByName("debug") {
@@ -261,6 +270,6 @@ tasks.lintKotlin {
     dependsOn(tasks.formatKotlin)
 }
 
-if (gradle.startParameter.taskRequests.toString().contains("Standard")) {
-    apply(mapOf("plugin" to "com.google.gms.google-services"))
-}
+//if (gradle.startParameter.taskRequ|ests.toString().contains("Standard")) {
+//    apply(mapOf("plugin" to "com.google.gms.google-services"))
+//}
